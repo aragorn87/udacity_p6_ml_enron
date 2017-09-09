@@ -47,14 +47,14 @@ A couple of new features were added to the dataset as below:
 -  bonus_salary_ratio = bonus / salary [over and above the salary payments made to the individual]
 -  fraction_poi_to = from_poi_to_this_person / to_messages [fraction of emails sent to the person from a POI]
 -  fraction_poi_from = from_this_person_to_poi / from_messages [fraction of emails sent by the person to a POI]
--  fraction_shared_receipt = shared_receipt_with_poi / to_messages [fraction os recieved emails with a copied POI]
--  poi_interation_total = (from_poi_to_this_person + from_this_person_to_poi )/ (from_messages + to_messages) [fraction of all interactions with a POI]
+-  fraction_shared_receipt = shared_receipt_with_poi / to_messages [fraction of received emails with a copied POI]
+-  poi_interaction_total = (from_poi_to_this_person + from_this_person_to_poi )/ (from_messages + to_messages) [fraction of all interactions with a POI]
 
-All the above features were created to check if they are any better in explaining the outcome variable than either the numerator or the denominator or both. As is desplayed in the below mentioned scoring section, some of the features scored high than the original features. However, some of them were dropped as there was a loss of information due to the presence of NaNs in either the numerator or the denominator.
+All the above features were created to check if they are any better in explaining the outcome variable than either the numerator or the denominator or both. As is displayed in the below mentioned scoring section, some of the features scored high than the original features. However, some of them were dropped as there was a loss of information due to the presence of NaNs in either the numerator or the denominator.
 
 > In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.
 
-SelectKBest was initially used to score all features. Based on the scores and intuition, some of the features were dropped. Later, using k=10, features were selected. The fetaure importance score matrix is as below:
+SelectKBest was initially used to score all features. Based on the scores and intuition, some of the features were dropped. Later, using k=10, features were selected. The feature importance score matrix is as below:
 
 | Feature | Score | % NaNs |
 | --- | --- | ---|
@@ -153,13 +153,11 @@ Validation is the process of verifying the performance of a model over a 'hold-o
 
 In our case, validation was very important given the skewed classes within the data set. To avoid the case where the train and test samples were unevenly distributed, cross validation using startified sample shifts was used over 1000 folds. In this case, the training set is further segmented into two subsets which are randomly generated over 1000 iterations. The model is trained on the first (and the bigger) subset and then the performance is measured on the second subset. The performance of the model is averaged over 1000 runs to give a mean performance score of the evaluation metric being considered. This ensures that we avoid the pitfall of uneven distribution between train and test sets.
 
-
-
 > Give at least 2 evaluation metrics and your average performance for each of them.  Explain an interpretation of your metrics that says something human-understandable about your algorithm’s performance.
 
 The evaluation metric which was primarily used to tune the models is f1 score which takes into consideration both the recall_score and the precision_score. Whereas we could have used either of the metrics (recall_score or precision_score) to fine tune the model, it wouldn't have been optimal as the intent of the excercise is to have good precision as well as recall.
 
-Precision is a measure of how many times is an algorithm predictive the outcome correctly when it does predict a positive result. In context, if our model predicts that POIs, precision score would quantify the number of times we would be correct in further investigating individuals.
+Precision is a measure of how many times is an algorithm predicting the outcome correctly when it does predict a positive result. In context, if our model predicts POIs, precision score would quantify the number of times we would be correct in further investigating individuals.
 
 Recall, on the other hand, is the fraction of times an algorithm is able to predict an outcome correctly. In context, if there are 100 POIs, an algorithm with a higher recall_score would be able to identify more of these individuals.
 
