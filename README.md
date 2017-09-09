@@ -1,5 +1,4 @@
-# udacity_p6_ml_enron
-
+# Udacity - Intro to Machine Learning - Identify Fraud from Enron Email
 >  Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. 
 
 The objective of this excercise is to identify the persons-of-interest within the enron email database who might have been involved in the fraud. We have with us a tidy dataset where information has been collated from the emails exchanged between the various employees as well as the financial information which was disclosed during the legal proceedings.
