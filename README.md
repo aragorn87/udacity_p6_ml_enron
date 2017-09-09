@@ -54,7 +54,7 @@ All the above features were created to check if they are any better in explainin
 
 > In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.
 
-SelectKBest was initially used to score all features. Based on the scores and intuition, some of the features were dropped. Later, using k=10, features were selected. The fetaure importance score matric is as below:
+SelectKBest was initially used to score all features. Based on the scores and intuition, some of the features were dropped. Later, using k=10, features were selected. The fetaure importance score matrix is as below:
 
 | Feature | Score | % NaNs |
 | --- | --- | ---|
@@ -84,11 +84,20 @@ SelectKBest was initially used to score all features. Based on the scores and in
 | restricted_stock_deferred | 0.065500 | 88.194444 |
 | stock_to_payments | 0.022819 | 25.694444 |
 
-## 3.
-What algorithm did you end up using? What other one(s) did you try? How did model performance differ between algorithms?  [relevant rubric item: “pick an algorithm”]
+> What algorithm did you end up using? What other one(s) did you try? How did model performance differ between algorithms?
 
-## 4.
-What does it mean to tune the parameters of an algorithm, and what can happen if you don’t do this well?  How did you tune the parameters of your particular algorithm? What parameters did you tune? (Some algorithms do not have parameters that you need to tune -- if this is the case for the one you picked, identify and briefly explain how you would have done it for the model that was not your final choice or a different model that does utilize parameter tuning, e.g. a decision tree classifier).  [relevant rubric items: “discuss parameter tuning”, “tune the algorithm”]
+The following algorithms were used. The performance reported is based on a 30 percent test sample (single fold):
+
+| Algorithm | Validation Precision Score | Validation Recall Score |
+| --- | --- | --- |
+| Gaussian Naive Bayes | 0.5 | 0.6 |
+| Decision Tree | 0.125 | 0.2 |
+| AdaBoost | 0.167 | 0.2 |
+| Support Vector Classifiers| 0 | 0 |
+
+Based on the above inital perfromance, SVC was dropped from the consideration set. GridSearchCV was performed on all the remaining algorithms while also increasing the number of folds to get a better sense of scores. (The above quoted scores for GaussianNB seem too good to be true which is usually the case when the samples are skewed. Cross Validation helps resolve such issues)
+
+> What does it mean to tune the parameters of an algorithm, and what can happen if you don’t do this well?  How did you tune the parameters of your particular algorithm? What parameters did you tune? 
 
 ## 5.
 What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?  [relevant rubric items: “discuss validation”, “validation strategy”]
