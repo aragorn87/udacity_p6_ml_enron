@@ -109,9 +109,9 @@ AdaBoost :
 >  parameters = {'n_estimators': [50,100,120,150,200],
              'learning_rate': [0.1,0.5,1,1.5,2.0,2.5,5]}
 
-abc = AdaBoostClassifier()
+> abc = AdaBoostClassifier()
 
-clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
+> clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
 
 
 
