@@ -35,13 +35,54 @@ The following features were incorporated in to the final model:
 -  total_payments
 -  shared_receipt_with_poi
 
-While SelectKBest was used to find the best 10 features, some of the features were manually eliminated on the basis of understanding of the data. For e.g. 'excercised_stock_options' 
+While SelectKBest was used to find the best 10 features, some of the features were manually eliminated on the basis of understanding of the data. For e.g. 'excercised_stock_options' was emitted evon though it had a very high score in the SelectKBest routine. This was done because it seems that there is a very high correlation between the total_stock_value and the excercised_stock_options (based on eyeballing the data). Further, the newly created feature bonus_salary_ratio was also omitted as both salary and bonus were already accounted for and taking the ratio would lead a a loss of information in cases where bonus was not null but salary was.
 
 > Did you have to do any scaling? Why or why not? 
+Initially, scaling was done using the MinMaxScaler as the units across all features vary a lot. However, given that we were not using any techniques (like kNN, or PCA) the scaling was essentially not of any importance. In the end, we did retain it but the scaling had very little impact on the model performance.
 
 > As part of the assignment, you should attempt to engineer your own feature that does not come ready-made in the dataset -- explain what feature you tried to make, and the rationale behind it.
 
+A couple of new features were added to the dataset as below:
+-  stock_to_payments = total_stock_value / total_payments [vested interests dependent on the company performance indicator]
+-  bonus_salary_ratio = bonus / salary [over and above the salary payments made to the individual]
+-  fraction_poi_to = from_poi_to_this_person / to_messages [fraction of emails sent to the person from a POI]
+-  fraction_poi_from = from_this_person_to_poi / from_messages [fraction of emails sent by the person to a POI]
+-  fraction_shared_receipt = shared_receipt_with_poi / to_messages [fraction os recieved emails with a copied POI]
+-  poi_interation_total = (from_poi_to_this_person + from_this_person_to_poi )/ (from_messages + to_messages) [fraction of all interactions with a POI]
+
+All the above features were created to check if they are any better in explaining the outcome variable than either the numerator or the denominator or both. As is desplayed in the below mentioned scoring section, some of the features scored high than the original features. However, some of them were dropped as there was a loss of information due to the presence of NaNs in either the numerator or the denominator.
+
 > In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.
+
+SelectKBest was initially used to score all features. Based on the scores and intuition, some of the features were dropped. Later, using k=10, features were selected. The fetaure importance score matric is as below:
+
+| Feature | Score | % NaNs |
+| --- | --- | ---|
+| exercised_stock_options | 24.815080 | 29.861111 |
+| total_stock_value | 24.182899 | 13.194444 |
+| bonus | 20.792252 | 43.750000 |
+| salary | 18.289684 | 34.722222 |
+| fraction_poi_from | 16.409713 | 40.277778 |
+| deferred_income | 11.458477 | 66.666667 |
+| bonus_salary_ratio | 10.783585 | 43.750000 |
+| long_term_incentive | 9.922186 | 54.861111 |
+| restricted_stock | 9.212811 | 24.305556 |
+| fraction_shared_receipt | 9.101269 | 40.277778 |
+| total_payments | 8.772778 | 14.583333 |
+| shared_receipt_with_poi | 8.589421 | 40.277778 |
+| loan_advances | 7.184056 | 97.916667 |
+| expenses | 6.094173 | 34.722222 |
+| poi_interaction_total | 5.399370 | 40.277778 |
+| from_poi_to_this_person | 5.243450 | 40.277778 |
+| other | 4.187478 | 36.805556 |
+| fraction_poi_to | 3.128092 | 40.277778 |
+| from_this_person_to_poi | 2.382612 | 40.277778 |
+| director_fees | 2.126328 | 88.888889 |
+| to_messages | 1.646341 | 40.277778 |
+| deferral_payments | 0.224611 | 73.611111 |
+| from_messages | 0.169701 | 40.277778 |
+| restricted_stock_deferred | 0.065500 | 88.194444 |
+| stock_to_payments | 0.022819 | 25.694444 |
 
 ## 3.
 What algorithm did you end up using? What other one(s) did you try? How did model performance differ between algorithms?  [relevant rubric item: “pick an algorithm”]
