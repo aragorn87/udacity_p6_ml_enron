@@ -23,7 +23,6 @@ After removing these points, we still notice that the distribution is very uneve
 > What features did you end up using in your POI identifier, and what selection process did you use to pick them? 
 
 The following features were incorporated in to the final model:
--  poi
 -  total_stock_value
 -  bonus
 -  salary
@@ -38,6 +37,7 @@ The following features were incorporated in to the final model:
 While SelectKBest was used to find the best 10 features, some of the features were manually eliminated on the basis of understanding of the data. For e.g. 'excercised_stock_options' was emitted evon though it had a very high score in the SelectKBest routine. This was done because it seems that there is a very high correlation between the total_stock_value and the excercised_stock_options (based on eyeballing the data). Further, the newly created feature bonus_salary_ratio was also omitted as both salary and bonus were already accounted for and taking the ratio would lead a a loss of information in cases where bonus was not null but salary was.
 
 > Did you have to do any scaling? Why or why not? 
+
 Initially, scaling was done using the MinMaxScaler as the units across all features vary a lot. However, given that we were not using any techniques (like kNN, or PCA) the scaling was essentially not of any importance. In the end, we did retain it but the scaling had very little impact on the model performance.
 
 > As part of the assignment, you should attempt to engineer your own feature that does not come ready-made in the dataset -- explain what feature you tried to make, and the rationale behind it.
