@@ -113,6 +113,12 @@ AdaBoost :
 
 > clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
 
+Best fit model and scores:
+AdaBoostClassifier(algorithm='SAMME.R', base_estimator=None,
+          learning_rate=2.0, n_estimators=100, random_state=None)
+	Accuracy: 0.78513	Precision: 0.25333	Recall: 0.31400	F1: 0.28042	F2: 0.29965
+	Total predictions: 15000	True positives:  628	False positives: 1851	False negatives: 1372	True negatives: 11149
+  
 DecisionTree:
 >  parameters = {'criterion': ('gini','entropy'),
               'max_depth': [1,5,10,20],
@@ -122,9 +128,25 @@ DecisionTree:
 
 >  clf = GridSearchCV(dtc, parameters, cv=sss, scoring='f1')
 
-
+Best fit model and scores:
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=10,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+	Accuracy: 0.79793	Precision: 0.22389	Recall: 0.20900	F1: 0.21619	F2: 0.21182
+	Total predictions: 15000	True positives:  418	False positives: 1449	False negatives: 1582	True negatives: 11551
+  
+  GaussianNB:
+  Best fit model and scores:
+  GaussianNB(priors=None)
+	Accuracy: 0.83840	Precision: 0.37198	Recall: 0.30800	F1: 0.33698	F2: 0.31897
+	Total predictions: 15000	True positives:  616	False positives: 1040	False negatives: 1384	True negatives: 11960
+  
+  
 ## 5.
 What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?  [relevant rubric items: “discuss validation”, “validation strategy”]
 
-## 6.
-Give at least 2 evaluation metrics and your average performance for each of them.  Explain an interpretation of your metrics that says something human-understandable about your algorithm’s performance. [relevant rubric item: “usage of evaluation metrics”]
+> Give at least 2 evaluation metrics and your average performance for each of them.  Explain an interpretation of your metrics that says something human-understandable about your algorithm’s performance.
+
+
