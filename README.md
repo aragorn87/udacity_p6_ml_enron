@@ -6,9 +6,9 @@
 
 There are 146 data points (two of which are invalid entries) with 21 fields. Some of the key fields are:
 -  Details on salary, bonus, stocks
--  # of emails sent, received
--  # of emails sent to and recieved from identified POIs
--  # of emails with shared receipts with POIs
+-  number of emails sent, received
+-  number of emails sent to and recieved from identified POIs
+-  number of emails with shared receipts with POIs
 
 Some of these fields (like salary, bonus, and stocks) give us a lot of information about how high up a particular individual was within the Enron's hierarchy. Information about the emails being exchanged with a POI also insinuates an individuals role in the scams/ frauds. 
 
