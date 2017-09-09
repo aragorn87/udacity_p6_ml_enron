@@ -1,0 +1,7 @@
+References:
+1. https://github.com/seifip/udacity-data-analyst-nanodegree/tree/master/P5%20-%20Identifying%20Fraud%20from%20Enron%20Emails%20and%20Financial%20Data
+2. https://github.com/baumanab/udacity_intro_machinelearning_project
+3. sklearn documentation
+4. Udacity forums
+
+“I hereby confirm that this submission is my work. I have cited above the origins of any parts of the submission that were taken from Websites, books, forums, blog posts, github repositories, etc.
