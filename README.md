@@ -106,29 +106,31 @@ Ignoring to fine tune the model could mean that we do not have an optimal soluti
 Even though the selected algorithm was Gaussian Naive Bayes which doesnt have any parameters to fine tune, other algorithms were fine tuned as follows:
 
 AdaBoost :
->  parameters = {'n_estimators': [50,100,120,150,200],
+parameters = {'n_estimators': [50,100,120,150,200],
              'learning_rate': [0.1,0.5,1,1.5,2.0,2.5,5]}
+	     
+abc = AdaBoostClassifier()
 
-> abc = AdaBoostClassifier()
-
-> clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
+clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
 
 Best fit model and scores:
+
 AdaBoostClassifier(algorithm='SAMME.R', base_estimator=None,
           learning_rate=2.0, n_estimators=100, random_state=None)
 	Accuracy: 0.78513	Precision: 0.25333	Recall: 0.31400	F1: 0.28042	F2: 0.29965
 	Total predictions: 15000	True positives:  628	False positives: 1851	False negatives: 1372	True negatives: 11149
   
 DecisionTree:
->  parameters = {'criterion': ('gini','entropy'),
+parameters = {'criterion': ('gini','entropy'),
               'max_depth': [1,5,10,20],
              'min_samples_split': [2,4,6,8,10,20]}
              
->  dtc = DecisionTreeClassifier()
+dtc = DecisionTreeClassifier()
 
->  clf = GridSearchCV(dtc, parameters, cv=sss, scoring='f1')
+clf = GridSearchCV(dtc, parameters, cv=sss, scoring='f1')
 
 Best fit model and scores:
+
 DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=10,
             max_features=None, max_leaf_nodes=None,
             min_impurity_split=1e-07, min_samples_leaf=1,
@@ -137,16 +139,28 @@ DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=10,
 	Accuracy: 0.79793	Precision: 0.22389	Recall: 0.20900	F1: 0.21619	F2: 0.21182
 	Total predictions: 15000	True positives:  418	False positives: 1449	False negatives: 1582	True negatives: 11551
   
-  GaussianNB:
-  Best fit model and scores:
-  GaussianNB(priors=None)
+GaussianNB:
+
+Best fit model and scores:
+
+GaussianNB(priors=None)
 	Accuracy: 0.83840	Precision: 0.37198	Recall: 0.30800	F1: 0.33698	F2: 0.31897
 	Total predictions: 15000	True positives:  616	False positives: 1040	False negatives: 1384	True negatives: 11960
-  
-  
-## 5.
-What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?  [relevant rubric items: “discuss validation”, “validation strategy”]
+
+>  What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis? 
+
+Validation is the process of verifying the performance of a model over a 'hold-out' set. This practice tries to avoid the issue of overfitting where the model is very good at predicting the outcome when exposed to situations it has already been trained on. However, an overfit model fails to generalize and is often not the optimal solution to a problem.
+
+In our case, validation was very important given the skewed classes within the data set. To avoid the case where the train and test samples were unevenly distributed, cross validation using startified sample shifts was used over 1000 folds. In this case, the training set is further segmented into two subsets which are randomly generated over 1000 iterations. The model is trained on the first (and the bigger) subset and then the performance is measured on the second subset. The performance of the model is averaged over 1000 runs to give a mean performance score of the evaluation metric being considered. This ensures that we avoid the pitfall of uneven distribution between train and test sets.
+
+
 
 > Give at least 2 evaluation metrics and your average performance for each of them.  Explain an interpretation of your metrics that says something human-understandable about your algorithm’s performance.
 
+The evaluation metric which was primarily used to tune the models is f1 score which takes into consideration both the recall_score and the precision_score. Whereas we could have used either of the metrics (recall_score or precision_score) to fine tune the model, it wouldn't have been optimal as the intent of the excercise is to have good precision as well as recall.
 
+Precision is a measure of how many times is an algorithm predictive the outcome correctly when it does predict a positive result. In context, if our model predicts that POIs, precision score would quantify the number of times we would be correct in further investigating individuals.
+
+Recall, on the other hand, is the fraction of times an algorithm is able to predict an outcome correctly. In context, if there are 100 POIs, an algorithm with a higher recall_score would be able to identify more of these individuals.
+
+Accuracy score (% cases where classes were predicted correctly) is not a good measure in cases where a data set is skewed (very few POIs as compared to the total number of individuals). This is because, an algorithm which predicts all of them to be non-POIs will have a very high accuracy score. Such algorithms (which maximize accuracy_score) are of little use in cases where they might have further implications. For e.g. initiating an investigation against an otherwise non-POI person can have consequences (in terms of emotional impact on individuals, or a probable defamation case later on). Further, the bandwidth of the resources are also limited which put a constrain on the number of people that can be investigated.
