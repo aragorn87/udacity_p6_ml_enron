@@ -1,7 +1,8 @@
 # udacity_p6_ml_enron
 
 ## 1. 
->  Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. Were there any outliers in the data when you got it, and how did you handle those? 
+>  Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. 
+
 The objective of this excercise is to identify the persons-of-interest within the enron email database who might have been involved in the fraud. We have with us a tidy dataset where information has been collated from the emails exchanged between the various employees as well as the financial information which was disclosed during the legal proceedings.
 
 There are 146 data points (two of which are invalid entries) with 21 fields. Some of the key fields are:
@@ -12,6 +13,7 @@ There are 146 data points (two of which are invalid entries) with 21 fields. Som
 
 Some of these fields (like salary, bonus, and stocks) give us a lot of information about how high up a particular individual was within the Enron's hierarchy. Information about the emails being exchanged with a POI also insinuates an individuals role in the scams/ frauds. 
 
+> Were there any outliers in the data when you got it, and how did you handle those? 
 Outliers: The data had the entry 'TOTAL' which is clearly a spreadsheet quirk. This was removed from the dataset. Also, an entry 'THE TRAVEL AGENCY IN THE PARK' was also present which according the InsiderPay document states that 'Payments were made by Enron employees on account of business-related travel to The Travel Agency in the Park (later Alliance Worldwide), which was coowned by the sister of Enron's former Chairman.  Payments made by the Debtor to reimburse employees for these expenses have not been included.'. Clearly, this particular entry is not an individual and hence was removed.
 
 After removing these points, we still notice that the distribution is very uneven with a handful of individuals exhibiting very high values of salaries and bonuses. After careful consideration, there points were retained as these values are not outliers. 
