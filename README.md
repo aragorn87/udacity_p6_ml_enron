@@ -113,6 +113,14 @@ AdaBoost :
 
 > clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
 
+DecisionTree:
+>  parameters = {'criterion': ('gini','entropy'),
+              'max_depth': [1,5,10,20],
+             'min_samples_split': [2,4,6,8,10,20]}
+             
+>  dtc = DecisionTreeClassifier()
+
+>  clf = GridSearchCV(dtc, parameters, cv=sss, scoring='f1')
 
 
 ## 5.
