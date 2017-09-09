@@ -99,6 +99,20 @@ Based on the above inital perfromance, SVC was dropped from the consideration se
 
 > What does it mean to tune the parameters of an algorithm, and what can happen if you don’t do this well?  How did you tune the parameters of your particular algorithm? What parameters did you tune? 
 
+Parameter fine tuning is a process of identifying the best parameters which give the best result for a given algortithm. It is an iterative process where the performance of models are compared by varying the key parameters. sklearn gives us the flexibility to automate the process using GridSearchCV where we can provide all possible options of a parameter we want to test out to find the best fit. 
+
+Ignoring to fine tune the model could mean that we do not have an optimal solution. Also, we could be overfitting the data if we only design the model based on single set of parameters. 
+
+Even though the selected algorithm was Gaussian Naive Bayes which doesnt have any parameters to fine tune, other algorithms were fine tuned as follows:
+
+> AdaBoost :
+parameters = {'n_estimators': [50,100,120,150,200],
+             'learning_rate': [0.1,0.5,1,1.5,2.0,2.5,5]}
+abc = AdaBoostClassifier()
+clf = GridSearchCV(abc, parameters, cv=10, scoring='f1')
+
+
+
 ## 5.
 What is validation, and what’s a classic mistake you can make if you do it wrong? How did you validate your analysis?  [relevant rubric items: “discuss validation”, “validation strategy”]
 
