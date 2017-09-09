@@ -1,6 +1,5 @@
 # udacity_p6_ml_enron
 
-## 1. 
 >  Summarize for us the goal of this project and how machine learning is useful in trying to accomplish it. As part of your answer, give some background on the dataset and how it can be used to answer the project question. 
 
 The objective of this excercise is to identify the persons-of-interest within the enron email database who might have been involved in the fraud. We have with us a tidy dataset where information has been collated from the emails exchanged between the various employees as well as the financial information which was disclosed during the legal proceedings.
@@ -21,8 +20,28 @@ After removing these points, we still notice that the distribution is very uneve
 
 ![Outlier Treatment](/outlier.png?raw=true "Optional Title")
 
-## 2.
-What features did you end up using in your POI identifier, and what selection process did you use to pick them? Did you have to do any scaling? Why or why not? As part of the assignment, you should attempt to engineer your own feature that does not come ready-made in the dataset -- explain what feature you tried to make, and the rationale behind it. (You do not necessarily have to use it in the final analysis, only engineer and test it.) In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.  [relevant rubric items: “create new features”, “intelligently select features”, “properly scale features”]
+> What features did you end up using in your POI identifier, and what selection process did you use to pick them? 
+
+The following features were incorporated in to the final model:
+-  poi
+-  total_stock_value
+-  bonus
+-  salary
+-  fraction_poi_from
+-  deferred_income
+-  long_term_incentive
+-  restricted_stock
+-  fraction_shared_receipt
+-  total_payments
+-  shared_receipt_with_poi
+
+While SelectKBest was used to find the best 10 features, some of the features were manually eliminated on the basis of understanding of the data. For e.g. 'excercised_stock_options' 
+
+> Did you have to do any scaling? Why or why not? 
+
+> As part of the assignment, you should attempt to engineer your own feature that does not come ready-made in the dataset -- explain what feature you tried to make, and the rationale behind it.
+
+> In your feature selection step, if you used an algorithm like a decision tree, please also give the feature importances of the features that you use, and if you used an automated feature selection function like SelectKBest, please report the feature scores and reasons for your choice of parameter values.
 
 ## 3.
 What algorithm did you end up using? What other one(s) did you try? How did model performance differ between algorithms?  [relevant rubric item: “pick an algorithm”]
