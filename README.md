@@ -109,9 +109,9 @@ Best fit model and scores:
 
 ```python
 AdaBoostClassifier(algorithm='SAMME.R', base_estimator=None, learning_rate=1,
-          n_estimators=150, random_state=None)
-	Accuracy: 0.81757	Precision: 0.29297	Recall: 0.19600	F1: 0.23487	F2: 0.20990
-	Total predictions: 14000	True positives:  392	False positives:  946	False negatives: 1608	True negatives: 11054
+          n_estimators=50, random_state=None)
+	Accuracy: 0.82636	Precision: 0.32379	Recall: 0.19800	F1: 0.24573	F2: 0.21468
+	Total predictions: 14000	True positives:  396	False positives:  827	False negatives: 1604	True negatives: 11173
 ```
 
 DecisionTree:
@@ -130,10 +130,10 @@ Best fit model and scores:
 DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=20,
             max_features=None, max_leaf_nodes=None,
             min_impurity_split=1e-07, min_samples_leaf=1,
-            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            min_samples_split=8, min_weight_fraction_leaf=0.0,
             presort=False, random_state=None, splitter='best')
-	Accuracy: 0.78971	Precision: 0.23543	Recall: 0.21000	F1: 0.22199	F2: 0.21464
-	Total predictions: 14000	True positives:  420	False positives: 1364	False negatives: 1580	True negatives: 10636
+	Accuracy: 0.79493	Precision: 0.21994	Recall: 0.17100	F1: 0.19241	F2: 0.17896
+	Total predictions: 14000	True positives:  342	False positives: 1213	False negatives: 1658	True negatives: 10787
 ```
 
 GaussianNB:
