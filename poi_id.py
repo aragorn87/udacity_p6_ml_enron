@@ -1,8 +1,4 @@
-
 # coding: utf-8
-
-# In[17]:
-
 #!/usr/bin/python
 
 import sys
@@ -13,25 +9,25 @@ sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
+import matplotlib.pyplot
+
+
+
+
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-#features_list = ['poi','salary'] # You will need to use more features
 outlier_check=['salary','bonus']
 
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
-
-
-# In[18]:
-
 my_data = data_dict
 data = featureFormat(my_data, outlier_check, sort_keys = True)
 
 ### Task 2: Remove outliers
-import matplotlib.pyplot
+
 
 for point in data:
     salary = point[0]
@@ -42,15 +38,8 @@ matplotlib.pyplot.xlabel("salary")
 matplotlib.pyplot.ylabel("bonus")
 matplotlib.pyplot.show()
 
-
-
-# In[19]:
-
 my_data.pop('TOTAL',0)
 my_data.pop('THE TRAVEL AGENCY IN THE PARK',0)
-
-
-# In[20]:
 
 data = featureFormat(my_data, outlier_check, sort_keys = True)
 
@@ -63,8 +52,6 @@ matplotlib.pyplot.xlabel("salary")
 matplotlib.pyplot.ylabel("bonus")
 matplotlib.pyplot.show()
 
-
-# In[21]:
 
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
@@ -106,11 +93,13 @@ for key, item in my_data.iteritems():
     else:
         my_data[key]['poi_interaction_total'] = 1.0*(my_data[key]['from_poi_to_this_person']+my_data[key]['from_this_person_to_poi'])/(my_data[key]['from_messages']+my_data[key]['to_messages'])
 
+### Generating a list of features for future reference; removing 'email_address' and moving 'poi' to the front of the list
+features_list=[]
+features_list=my_data['METTS MARK'].keys()
+features_list.remove('email_address')
+features_list.remove('poi')
+features_list=['poi']+features_list
 
-# In[22]:
-
-features_list=['poi', 'bonus', 'bonus_salary_ratio', 'deferral_payments','deferred_income', 'director_fees','exercised_stock_options','expenses','fraction_poi_from','fraction_poi_to','fraction_shared_receipt','from_messages','from_poi_to_this_person','from_this_person_to_poi','loan_advances','long_term_incentive','other','poi_interaction_total','restricted_stock','restricted_stock_deferred','salary','shared_receipt_with_poi','stock_to_payments','to_messages','total_payments','total_stock_value']
-#features_list=['poi', 'bonus', 'bonus_salary_ratio', 'deferral_payments','deferred_income', 'director_fees','expenses','fraction_poi_from','fraction_poi_to','fraction_shared_receipt','from_messages','from_poi_to_this_person','from_this_person_to_poi','loan_advances','long_term_incentive','other','poi_interaction_total','restricted_stock','restricted_stock_deferred','salary','shared_receipt_with_poi','stock_to_payments','to_messages','total_payments','total_stock_value']
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_data, features_list, sort_keys = True)
@@ -122,86 +111,52 @@ scaler.fit(features)
 
 features = scaler.transform(features)
 
-# finding k best features
+# finding feature importance score of all features
 from sklearn.feature_selection import SelectKBest
 selector = SelectKBest(k='all')
 selector.fit(features, labels)
 
 feature_importance_table=pd.DataFrame(columns=['features','importance'])
-i=0
 feature_importance_table['features'] = features_list[1:]
 feature_importance_table['importance'] = selector.scores_
-#for n,g in zip(features_list[1:],selector.scores_):
-#    feature_importance_table['feature'].append(n)
-#    feature_importance_table['importance'].append(g)
-    
-#print selector.scores_
 
 print feature_importance_table.sort('importance', ascending=False)
-#sort_values(by=(['importance']), axis=1, ascending=False)
 print sum(feature_importance_table['importance'])
 
 
-# In[39]:
-
-#removin excersides_stock-options as it is equivalent to total_stock_value
-#removing bosus salayr ration as information loss can happen
-
-
-# In[23]:
-
-#features_list=['poi', 'bonus', 'bonus_salary_ratio', 'deferral_payments','deferred_income', 'director_fees','exercised_stock_options','expenses','fraction_poi_from','fraction_poi_to','fraction_shared_receipt','from_messages','from_poi_to_this_person','from_this_person_to_poi','loan_advances','long_term_incentive','other','poi_interaction_total','restricted_stock','restricted_stock_deferred','salary','shared_receipt_with_poi','stock_to_payments','to_messages','total_payments','total_stock_value']
-features_list=['poi', 'bonus','deferral_payments','deferred_income', 'director_fees','expenses','fraction_poi_from','fraction_poi_to','fraction_shared_receipt','from_messages','from_poi_to_this_person','from_this_person_to_poi','loan_advances','long_term_incentive','other','poi_interaction_total','restricted_stock','restricted_stock_deferred','salary','shared_receipt_with_poi','stock_to_payments','to_messages','total_payments','total_stock_value']
+#removing exercised_stock-options as it is equivalent to total_stock_value
+#removing bonus salary ratio as information loss can happen
+features_list.remove('exercised_stock_options')
+features_list.remove('bonus_salary_ratio')
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_data, features_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
-from sklearn.feature_selection import SelectKBest
-selector = SelectKBest(k='all')
-selector.fit(features, labels)
 
-feature_importance_table=pd.DataFrame(columns=['features','importance', 'missing_values'])
-i=0
-feature_importance_table['features'] = features_list[1:]
-feature_importance_table['importance'] = selector.scores_
-#for n,g in zip(features_list[1:],selector.scores_):
-#    feature_importance_table['feature'].append(n)
-#    feature_importance_table['importance'].append(g)
-    
-#print selector.scores_
+# Feature selection
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.naive_bayes import GaussianNB
+select = SelectKBest()
+clf = GaussianNB()
+steps = [('feature_selection', select),
+        ('gaussian_nb', clf)]
+pipeline = Pipeline(steps)
+parameters = dict(feature_selection__k=range(2,len(features_list)-1))
+cv = GridSearchCV(pipeline, param_grid=parameters, scoring='f1')
+cv.fit(features, labels )
+print cv.best_score_, cv.best_params_['feature_selection__k']
 
+#selecting k best features, based on above output
+select = SelectKBest(k=cv.best_params_['feature_selection__k'])
+select.fit(features, labels)
+features = select.transform(features)
 
-#sort_values(by=(['importance']), axis=1, ascending=False)
-#print sum(feature_importance_table['importance'])
-
-#for key, item in my_data.iteritems():
-#    for key2, item2 in item.iteritems():
-total_count= len(my_data)
-missing_val=[]
-for i, series in feature_importance_table.iterrows():
-    count_nan=0
-    for key, item in my_data.iteritems():
-        if item[series['features']]== 'NaN':
-            count_nan +=1
-    per_nan = 100.0*count_nan/total_count
-    missing_val.append(per_nan)
-feature_importance_table['missing_values'] = missing_val
-#next(df.iterrows())[1]
-print feature_importance_table.sort('importance', ascending=False)
-    
-
-
-# In[24]:
-
-#selecting 10 best features
-features_list=['poi', 'total_stock_value','bonus','salary', 'fraction_poi_from','deferred_income','long_term_incentive','restricted_stock','fraction_shared_receipt','total_payments','shared_receipt_with_poi']
-selector = SelectKBest(k=10)
-selector.fit(features, labels)
-
-features = selector.transform(features)
-
-
-# In[25]:
+#making corresponding changes to features_list
+m=features_list[1:]
+x=zip(select.get_support(), m)
+features_list=[i[1] for i in x if i[0]==True]
+features_list=['poi']+features_list
 
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
@@ -210,37 +165,33 @@ features = selector.transform(features)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
+data = featureFormat(my_data, features_list, sort_keys = True)
+labels, features = targetFeatureSplit(data)
 from sklearn.metrics import recall_score, precision_score
 
 from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test =     train_test_split(features, labels, test_size=0.3, random_state=42)
+features_train, features_test, labels_train, labels_test = \
+    train_test_split(features, labels, test_size=0.3, random_state=42)
 
-from sklearn.naive_bayes import GaussianNB
 clf = GaussianNB()
 clf.fit(features_train, labels_train)
-#print "GaussianNB accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
+print "GaussianNB accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
 
 
 from sklearn.svm import SVC
 clf = SVC()
 clf.fit(features_train, labels_train)
-#print "SVM accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
+print "SVM accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
 
 from sklearn.tree import DecisionTreeClassifier
 clf = DecisionTreeClassifier()
 clf.fit(features_train, labels_train)
-#print "Decision Tree accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
+print "Decision Tree accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
 
 from sklearn.ensemble import AdaBoostClassifier
 clf=AdaBoostClassifier()
 clf.fit(features_train, labels_train)
-#print "Adaboost accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
-
-
-
-
-
-# In[26]:
+print "Adaboost accuracy: " , recall_score(labels_test, clf.predict(features_test)), precision_score(labels_test, clf.predict(features_test))
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -254,12 +205,11 @@ clf.fit(features_train, labels_train)
 #features_train, features_test, labels_train, labels_test = \
 #    train_test_split(features, labels, test_size=0.3, random_state=42)
 
-#From the above excercise, it seems that out GaussianNB is doing a good job. However, it is possible
-#that the performance is due to the uneven distribution of samples between training and test sets. Thererfore,
-#we will now use StratifiedShiffleSplit over 1000 folds to come up with the best model and chech the score using 
-#testet.py file
+#From the above exercise, it seems that out GaussianNB and DecisionTree are doing a good job. However, it is possible
+#that the performance is due to the uneven distribution of samples between training and test sets. Therefore,
+#we will now use StratifiedShiffleSplit over 1000 folds to come up with the best model and check the score using 
+#tester.py file
 
-from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import StratifiedShuffleSplit
 from tester import test_classifier
 
@@ -306,4 +256,3 @@ test_classifier(clf, my_data, features_list, folds = 1000)
 ### generates the necessary .pkl files for validating your results.
 my_dataset=my_data
 dump_classifier_and_data(clf, my_dataset, features_list)
-
